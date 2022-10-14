@@ -4,8 +4,8 @@
 
 
 /*
-     FILE ARCHIVED ON 17:31:18 Mar 16, 2009 AND RETRIEVED FROM THE
-     INTERNET ARCHIVE ON 14:01:43 Feb 22, 2021.
+     FILE ARCHIVED ON 23:35:59 May 21, 2009 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 14:01:44 Feb 22, 2021.
      JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
 
      ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
@@ -42,11 +42,12 @@ input, textarea, select {
 
 /* Body */
 
+
+
 body {
  padding: 0;
  margin: 0;
- 
- background: #050400 url(../img/main/layout/bg.jpg) repeat-y center top;
+ background: #050400 url(../img/main/layout/bg_cc_09.jpg) repeat-y center top;
  text-align: center;
  font-family: Arial, Helvetica, FreeSans, sans-serif;
 }
@@ -57,17 +58,13 @@ body {
 
 #scroll {
  height: 1%;
- 
- background: transparent url(../img/main/layout/bg_scroll.jpg) repeat-y center 83px;
- 
+ background: transparent url(../img/main/layout/bg_scroll_cc_09.jpg) repeat-y center 83px;
 }
 
 #head {
  font-size: 0;
  padding-top: 12px;
- 
- background: transparent url(../img/main/layout/bg_header.jpg) no-repeat center top;
- 
+ background: transparent url(../img/main/layout/bg_header_cc_09.jpg) no-repeat center top;
 }
 
 #headBoard,#headOrangeTop,#headOrangeBottom,#headImage,#headAdvert,#menubox,.navigation,.navigation2,.navigation3, #headShort {
@@ -353,21 +350,15 @@ way to fit your requirements.
 /* Sections */
 
 .sectionHeader {
- 
- background: #bd9c5a url(../img/main/layout/section_header_bg.png) top repeat-x;
- 
+ background: #bd9c5a url(../img/main/layout/section_header_bg_cc_09.png) top repeat-x;
 }
 
 .sectionHeader .left {
- 
- background: url(../img/main/layout/section_header_left.png) left no-repeat;
-  
+ background: url(../img/main/layout/section_header_left_cc_09.png) left no-repeat;
 }
 
 .sectionHeader .right {
- 
- background: url(../img/main/layout/section_header_right.png) right no-repeat;
- 
+ background: url(../img/main/layout/section_header_right_cc_09.png) right no-repeat;
 }
 
 .sectionHeader .plaque, .sectionHeader .plaque_medium, .sectionHeader .plaque_large {
@@ -382,21 +373,15 @@ way to fit your requirements.
 }
 
 .sectionHeader .plaque_medium {
- 
- background: url(../img/main/layout/section_header_plaque_medium.png) center top no-repeat;
- 
+ background: url(../img/main/layout/section_header_plaque_medium_cc_09.png) center top no-repeat;
 }
 
 .sectionHeader .plaque_large {
- 
- background: url(../img/main/layout/section_header_plaque_large.png) center top no-repeat;
- 
+ background: url(../img/main/layout/section_header_plaque_large_cc_09.png) center top no-repeat;
 }
 
 .sectionHeader .plaque {
- 
- background: url(../img/main/layout/section_header_plaque.png) center top no-repeat;
- 
+ background: url(../img/main/layout/section_header_plaque_cc_09.png) center top no-repeat;
 }
 
 .sectionHeader img {
@@ -458,10 +443,7 @@ a {
  margin: auto;
  padding-top: 5px;
  text-align: center;
- 
- 
- background: transparent url(../img/main/layout/bg_footer-1.jpg) center bottom no-repeat;
- 
+ background: transparent url(../img/main/layout/bg_footer-2.png) center bottom no-repeat;
 }
 
 .contain {
@@ -470,10 +452,7 @@ a {
  margin-left: auto;
  margin-right: auto;
  position: relative;
- 
- 
- background: #bf9f5e url(../img/main/layout/bg_footer-1.jpg) center bottom no-repeat;
- 
+ background: transparent url(../img/main/layout/bg_footer-2.png) center bottom no-repeat;
 }
 
 #footer a {
@@ -496,10 +475,10 @@ a {
 
 .jagexlink {
  position: absolute;
- right: 9px;
- bottom: 16px;
- height: 38px;
- width: 114px;
+ right: 11px;
+ top: 22px;
+ height: 31px;
+ width: 110px;
 }
 
 /* xFooter */

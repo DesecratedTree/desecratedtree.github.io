@@ -4,8 +4,8 @@
 
 
 /*
-     FILE ARCHIVED ON 17:31:18 Mar 16, 2009 AND RETRIEVED FROM THE
-     INTERNET ARCHIVE ON 14:01:43 Feb 22, 2021.
+     FILE ARCHIVED ON 21:35:55 Dec 6, 2010 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 14:02:54 Feb 22, 2021.
      JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
 
      ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
@@ -14,7 +14,7 @@
 
 
 
-/* Global overrides */
+
 
 html {
  overflow-y: scroll;
@@ -32,45 +32,66 @@ a img {
  clear: both;
  font-size: 0px;
  height: 0px;
+ line-height: 0px;
 }
 
 input, textarea, select {
  vertical-align: middle;
 }
 
-/* xGlobal overrides */
 
-/* Body */
+
+
+
 
 body {
  padding: 0;
  margin: 0;
- 
- background: #050400 url(../img/main/layout/bg.jpg) repeat-y center top;
  text-align: center;
  font-family: Arial, Helvetica, FreeSans, sans-serif;
 }
 
-/* xBody */
+.bodyBackground {
+ 
+background: black;
+}
 
-/* Header */
+.bodyBackgroundHead {
+ background: url(../img/main/skins/default/bg_head-14.jpg) no-repeat scroll center top;
+ overflow: hidden;
+}
+
+.bodyBackgroundHeadAdvert {
+ background: url(../img/main/skins/default/bg_head_advert-14.jpg) no-repeat scroll center top;
+ overflow: hidden;
+}
+
+
+
+
+
 
 #scroll {
  height: 1%;
  
- background: transparent url(../img/main/layout/bg_scroll.jpg) repeat-y center 83px;
- 
+ background: transparent url(../img/main/layout/bg_scroll-1.jpg) repeat-y center 83px;
 }
 
 #head {
  font-size: 0;
- padding-top: 12px;
  
- background: transparent url(../img/main/layout/bg_header.jpg) no-repeat center top;
- 
+ background: transparent url(../img/main/layout/bg_header-1.png) no-repeat center top;
 }
 
-#headBoard,#headOrangeTop,#headOrangeBottom,#headImage,#headAdvert,#menubox,.navigation,.navigation2,.navigation3, #headShort {
+#headBg {
+ padding-top: 12px;
+ padding-bottom: 83px;
+ margin-bottom: -83px;
+ 
+ background: transparent url(../img/main/layout/bg_header.jpg) no-repeat center top;
+}
+
+#headBoard,#headOrangeTop,#headOrangeBottom,#headImage,#headAdvert,#menubox,.navigation,.navigation2,.navigation3, #headShort,#bannerNoad {
  margin: auto;
  width: 766px;
 }
@@ -100,6 +121,7 @@ body {
 }
 
 #headAdvert {
+ margin-top: 4px;
  background: url(../img/advert/advert.png) top left no-repeat;
 }
 
@@ -165,16 +187,77 @@ body {
  position: absolute;
 }
 
-/* xHeader */
+#bannerNoad {
+ position: relative;
+ height: 179px;
+ text-align: left;
+}
 
-/* Menu */
+#bannerNoad a {
+ left: 210px;
+ top: 19px;
+ width: 346px;
+ height: 164px;
+}
+
+.HoverImg {
+ position: relative;
+ display: block;
+  overflow: hidden;
+}
+
+.HoverImg:hover {
+  font-weight: bold;
+}
+
+.HoverImg img {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 200%;
+}
+
+.HoverImg:hover img {
+  top: -100%;
+}
+
+#langAndLogin {
+ margin: 0 auto;
+ width: 764px;
+ height: 13px;
+}
+
+#langAndLogin #sessionText {
+ color: #4E3721;
+ position: static;
+ float: right;
+}
+
+#langAndLogin #sessionText #accountName {
+ color: #2C1F12;
+}
+
+#langAndLogin #lang {
+ position: static;
+ float: left;
+}
+
+
+
+
+
 
 #menubox {
+ margin-top: 4px;
  background: #898989 url(../img/main/layout/menu_bg.png) no-repeat left top;
  font-size: 12px;
  font-weight: bold;
  height: 27px;
- margin-top: 4px;
+}
+
+.bodyBackgroundHeadAdvert #menubox {
+ margin-bottom: 79px;
 }
 
 /* ================================================================
@@ -187,19 +270,19 @@ This stylesheet and the assocaited (x)html may be modified in any
 way to fit your requirements.
 =================================================================== */
 
-/* remove the bullets, padding and margins from the lists */
+
 #menubox ul{
  list-style-type: none;
  margin: 0;
 }
 
-/* set up top ul */
+
 #menus {
  margin: 0;
  padding: 0 0 0 5px;
 }
 
-/* make the top level links horizontal and position relative so that we can position the sub level */
+
 #menus li.top{
  float: left;
  position: relative;
@@ -208,7 +291,7 @@ way to fit your requirements.
  padding: 4px 0 0;
 }
 
-/* use the table to position the dropdown list in IE lte 6 */
+
 #menus table{
  position: absolute;
  border-collapse: collapse;
@@ -227,7 +310,7 @@ way to fit your requirements.
  height: 23px;
 }
 
-/* style top links */
+
 #menus a.tl, #menus a.tl:visited {
  display: block;
  width: 106px;
@@ -249,7 +332,7 @@ way to fit your requirements.
  color: #be1616;
 }
 
-/* style the top links hover & highlighted state */
+
 #menus li.top:hover a.tl,
 #menus a.tl:hover,
 #menus li.top:hover a.tl#login,
@@ -260,7 +343,7 @@ way to fit your requirements.
  background-position: left -24px;
 }
 
-/* 'you are here' highlights are done differently to workaround an ie bug */
+
 #navhome #menus #home .ts,
 #navplay #menus #play .ts,
 #navaccount #menus #account .ts,
@@ -274,7 +357,7 @@ way to fit your requirements.
  background: url(../img/main/layout/menu_buttons_bg.png) left -24px;
 }
 
-/* submenu and hover visibility */
+
 #menus li.top ul {
  visibility: hidden;
  position: absolute;
@@ -290,7 +373,7 @@ way to fit your requirements.
  visibility: visible;
 }
 
-/* style the submenu links */
+
 #menus li.top li {
  float: left;
 }
@@ -312,7 +395,7 @@ way to fit your requirements.
  padding: 3px 4px 0;
 }
 
-/* style the fly links :hover */
+
 #menus a.fly:hover {
  color: black;
  background-color: white;
@@ -329,17 +412,14 @@ way to fit your requirements.
  #menus a#guide:hover iframe { height: 110px; }
 
 
-
-
- #menus a#community:hover iframe { height: 132px; }
-
+#menus a#community:hover iframe { height: 110px; }
 
 #menus a#help:hover iframe { height: 132px; }
 
 
-/* xMenu */
 
-/* Content */
+
+
 
 #content {
  margin: 6px auto 0;
@@ -348,31 +428,26 @@ way to fit your requirements.
  font-size: 12px;
 }
 
-/* xContent */
 
-/* Sections */
+
+
 
 .sectionHeader {
- 
- background: #bd9c5a url(../img/main/layout/section_header_bg.png) top repeat-x;
- 
+ background: #bd9c5a url(../img/main/skins/default/section_header_bg-14.png) top repeat-x;
 }
 
 .sectionHeader .left {
- 
- background: url(../img/main/layout/section_header_left.png) left no-repeat;
-  
+ background: url(../img/main/skins/default/section_header_left-14.png) left no-repeat;
 }
 
 .sectionHeader .right {
- 
- background: url(../img/main/layout/section_header_right.png) right no-repeat;
- 
+ background: url(../img/main/skins/default/section_header_right-14.png) right no-repeat;
 }
 
 .sectionHeader .plaque, .sectionHeader .plaque_medium, .sectionHeader .plaque_large {
  height: 26px;
  overflow: hidden;
+ margin: 0;
  line-height: 25px;
  font-size: 14px;
  font-family: Palatino Linotype, Book Antiqua, Palatino, Times New Roman, Times, serif;
@@ -382,21 +457,15 @@ way to fit your requirements.
 }
 
 .sectionHeader .plaque_medium {
- 
- background: url(../img/main/layout/section_header_plaque_medium.png) center top no-repeat;
- 
+ background: url(../img/main/skins/default/section_header_plaque_medium-14.png) center top no-repeat;
 }
 
 .sectionHeader .plaque_large {
- 
- background: url(../img/main/layout/section_header_plaque_large.png) center top no-repeat;
- 
+ background: url(../img/main/skins/default/section_header_plaque_large-14.png) center top no-repeat;
 }
 
 .sectionHeader .plaque {
- 
- background: url(../img/main/layout/section_header_plaque.png) center top no-repeat;
- 
+ background: url(../img/main/skins/default/section_header_plaque-14.png) center top no-repeat;
 }
 
 .sectionHeader img {
@@ -449,19 +518,19 @@ a {
  background: url(../img/main/layout/subsection_subheader_bg.png) repeat-x;
 }
 
-/* xSections */
 
-/* Footer */
+
+
 
 #footer {
  clear: both;
- margin: auto;
+ margin: 0 auto;
  padding-top: 5px;
  text-align: center;
- 
- 
- background: transparent url(../img/main/layout/bg_footer-1.jpg) center bottom no-repeat;
- 
+ background: transparent center bottom no-repeat url(../img/main/layout/bg_footer-14.png) !important;
+ background: transparent center bottom no-repeat url(../img/main/layout/bg_footer_ie6-14.png);
+ position: relative;
+ height: 73px;
 }
 
 .contain {
@@ -470,10 +539,9 @@ a {
  margin-left: auto;
  margin-right: auto;
  position: relative;
- 
- 
- background: #bf9f5e url(../img/main/layout/bg_footer-1.jpg) center bottom no-repeat;
- 
+ background: transparent url(../img/main/layout/bg_footer-14.png) center bottom no-repeat;
+ top: 2px;
+ left: 0;
 }
 
 #footer a {
@@ -496,15 +564,15 @@ a {
 
 .jagexlink {
  position: absolute;
- right: 9px;
- bottom: 16px;
- height: 38px;
- width: 114px;
+ right: 11px;
+ top: 22px;
+ height: 31px;
+ width: 110px;
 }
 
-/* xFooter */
 
-/* KB trail */
+
+
 
 .location a:link {
  color: #c1a05d;
@@ -556,9 +624,9 @@ a {
  text-align: left;
 }
 
-/* xKB trail */
 
-/* Sunburst (default) theme */
+
+
 
 .row_a {
  background: #d3caa7;
@@ -568,9 +636,9 @@ a {
  background: #c2b892;
 }
 
-/* xSunburst (default) theme */
 
-/* Brown article theme */
+
+
 
 .brown_background {
  background-color: #4d3f29;
@@ -614,9 +682,9 @@ a {
 }
 
 
-/* xBrown article */
 
-/* SunBurst article */
+
+
 
 .article {
  background: #e9dfc5;
@@ -671,7 +739,8 @@ a {
  background: transparent;
 }
 
-/* xSunBurst article */
+
+
 .info_container {
  border-right: 1px solid #B3AA90;
  border-top: 1px solid #B3AA90;
@@ -714,7 +783,7 @@ a {
  margin: 20px 34px 25px;
 }
 
-/* Forms */
+
 
 .brown_background .textinput, .brown_background select, .brown_background textarea, .firstborder .textinput, .firstborder select, .firstborder textarea {
  background-color: #e9dfc5;
@@ -803,4 +872,77 @@ a {
  color: #898989;
 }
 
-/* x Forms */
+
+
+
+
+.loadtest{
+ visibility: hidden;
+ border: none;
+ width: 0px;
+ height: 0px;
+}
+
+
+
+
+ #bookmark {
+  text-align: center;
+  margin-top: -1px;
+ }
+ #bookmark img {
+  margin: 0 1px 0 0;
+  vertical-align: middle;
+ }
+ #bookmark a {
+ 
+  
+  margin-left: 16px;
+  
+ 
+  text-decoration: none;
+ }
+ #bookmark a span {
+  text-decoration: underline;
+ }
+ #bookmark a:hover span {
+  text-decoration: none;
+ }
+
+
+
+
+
+#feed {
+ margin-left: 1px;
+ float: left;
+ height: 24px;
+ line-height: 26px;
+}
+
+#feed a,
+#feed a:hover span {
+ text-decoration: none;
+ vertical-align: top;
+}
+
+#feed a span {
+ text-decoration: underline;
+}
+
+#feed img {
+ vertical-align: middle;
+}
+
+#feed sup {
+ font-size: smaller;
+}
+
+
+
+
+
+.sitetakeover_panel {
+ display: none;
+}
+
