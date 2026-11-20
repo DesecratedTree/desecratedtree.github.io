@@ -13,7 +13,7 @@ import { Input } from './input.js';
 import { Storage } from './storage.js';
 import { BALLS, DEFAULT_BALL, ballById, isBallUnlocked, preloadBallImages } from './balls.js';
 import { Effects } from './render/fx.js';
-import { createArenaRenderer, drawVignette } from './render/arena.js';
+import { createArenaRenderer } from './render/arena.js';
 import { drawHoopBack, drawHoopFront } from './render/hoop.js';
 import { drawAim, drawBall, drawPad, drawTrail } from './render/ball.js';
 
@@ -606,7 +606,7 @@ export class Game {
     const canvas = this.canvas;
 
     ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.fillStyle = '#04060f';
+    ctx.fillStyle = '#060b19';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.setTransform(this.sx, 0, 0, this.sy, 0, 0);
 
@@ -671,7 +671,6 @@ export class Game {
     });
 
     this.effects.draw(ctx);
-    drawVignette(ctx);
 
     ctx.restore();
   }

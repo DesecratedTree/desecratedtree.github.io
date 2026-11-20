@@ -23,13 +23,13 @@ function makeStars(seed, count) {
   const c = offscreen(ARENA.W, ARENA.H);
   const g = c.getContext('2d');
   const rnd = mulberry32(seed);
-  const colors = ['#ffffff', '#cfeaff', '#a9d8ff', '#ffe6c2', '#8fbfff'];
+  const colors = ['#ffffff', '#dff2ff', '#bfe4ff', '#ffeccd', '#a8ccff'];
 
   for (let i = 0; i < count; i++) {
     const x = rnd() * ARENA.W;
     const y = rnd() * ARENA.H;
-    const r = 0.4 + Math.pow(rnd(), 2.6) * 1.7;
-    const a = 0.18 + rnd() * 0.72;
+    const r = 0.5 + Math.pow(rnd(), 2.4) * 1.9;
+    const a = 0.32 + rnd() * 0.68;
     g.globalAlpha = a;
     g.fillStyle = colors[Math.floor(rnd() * colors.length)];
     g.beginPath();
@@ -58,17 +58,17 @@ function makeNebula() {
   g.globalCompositeOperation = 'lighter';
 
   const blobs = [
-    { x: ARENA.W * 0.12, y: ARENA.H * 0.3, r: ARENA.H * 0.58, color: 'rgba(38, 92, 180, 0.16)' },
-    { x: ARENA.W * 0.55, y: ARENA.H * 0.22, r: ARENA.H * 0.5, color: 'rgba(108, 34, 126, 0.13)' },
-    { x: ARENA.W * 0.86, y: ARENA.H * 0.14, r: ARENA.H * 0.45, color: 'rgba(16, 96, 136, 0.1)' },
-    { x: ARENA.W * 0.72, y: ARENA.H * 0.82, r: ARENA.H * 0.52, color: 'rgba(140, 44, 92, 0.09)' },
-    { x: ARENA.W * 0.3, y: ARENA.H * 0.58, r: ARENA.H * 0.68, color: 'rgba(28, 62, 120, 0.1)' },
+    { x: ARENA.W * 0.12, y: ARENA.H * 0.3, r: ARENA.H * 0.58, color: 'rgba(58, 122, 220, 0.3)' },
+    { x: ARENA.W * 0.55, y: ARENA.H * 0.22, r: ARENA.H * 0.5, color: 'rgba(140, 48, 168, 0.24)' },
+    { x: ARENA.W * 0.86, y: ARENA.H * 0.14, r: ARENA.H * 0.45, color: 'rgba(26, 140, 190, 0.2)' },
+    { x: ARENA.W * 0.72, y: ARENA.H * 0.82, r: ARENA.H * 0.52, color: 'rgba(180, 58, 118, 0.17)' },
+    { x: ARENA.W * 0.3, y: ARENA.H * 0.58, r: ARENA.H * 0.68, color: 'rgba(44, 96, 178, 0.2)' },
   ];
 
   for (const b of blobs) {
     const grad = g.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r);
     grad.addColorStop(0, b.color);
-    grad.addColorStop(0.55, b.color.replace(/[\d.]+\)$/, '0.045)'));
+    grad.addColorStop(0.55, b.color.replace(/[\d.]+\)$/, '0.09)'));
     grad.addColorStop(1, 'rgba(0,0,0,0)');
     g.fillStyle = grad;
     g.fillRect(b.x - b.r, b.y - b.r, b.r * 2, b.r * 2);
@@ -99,13 +99,13 @@ function makePlanet() {
   const rnd = mulberry32(20100712);
 
   const ocean = g.createLinearGradient(0, 0, 0, h);
-  ocean.addColorStop(0, '#0a2a44');
-  ocean.addColorStop(0.45, '#082238');
-  ocean.addColorStop(1, '#051624');
+  ocean.addColorStop(0, '#155078');
+  ocean.addColorStop(0.45, '#0e3a5c');
+  ocean.addColorStop(1, '#0a2740');
   g.fillStyle = ocean;
   g.fillRect(0, 0, w, h);
 
-  const greens = ['#1d5a45', '#257055', '#2f7d5c', '#2d6a52', '#3a8463'];
+  const greens = ['#2f8a6a', '#3ba37e', '#49b98f', '#3f9f7c', '#57c49a'];
   for (let c = 0; c < 14; c++) {
     const cx = rnd() * w;
     const cy = 70 + rnd() * (h - 150);
@@ -243,8 +243,8 @@ function drawPlanet(ctx, planet, time, ox, oy) {
 
   // outer atmosphere
   const halo = ctx.createRadialGradient(cx, cy, R * 0.95, cx, cy, R * 1.34);
-  halo.addColorStop(0, 'rgba(70, 180, 255, 0.2)');
-  halo.addColorStop(0.45, 'rgba(50, 140, 240, 0.07)');
+  halo.addColorStop(0, 'rgba(90, 200, 255, 0.3)');
+  halo.addColorStop(0.45, 'rgba(60, 160, 255, 0.11)');
   halo.addColorStop(1, 'rgba(30, 90, 180, 0)');
   ctx.fillStyle = halo;
   ctx.beginPath();
@@ -256,7 +256,7 @@ function drawPlanet(ctx, planet, time, ox, oy) {
   ctx.arc(cx, cy, R, 0, TAU);
   ctx.clip();
 
-  ctx.fillStyle = '#071a2b';
+  ctx.fillStyle = '#0b2a44';
   ctx.fillRect(cx - R, cy - R, R * 2, R * 2);
 
   // The map is 2:1. Draw it at 2R tall and 4R wide so the visible disc
@@ -280,11 +280,11 @@ function drawPlanet(ctx, planet, time, ox, oy) {
     cy,
     R * 1.05
   );
-  shade.addColorStop(0, 'rgba(255, 255, 255, 0.12)');
-  shade.addColorStop(0.32, 'rgba(255, 255, 255, 0.02)');
-  shade.addColorStop(0.6, 'rgba(0, 5, 14, 0.3)');
-  shade.addColorStop(0.85, 'rgba(0, 3, 10, 0.72)');
-  shade.addColorStop(1, 'rgba(0, 2, 7, 0.95)');
+  shade.addColorStop(0, 'rgba(255, 255, 255, 0.18)');
+  shade.addColorStop(0.32, 'rgba(255, 255, 255, 0.05)');
+  shade.addColorStop(0.6, 'rgba(0, 5, 14, 0.18)');
+  shade.addColorStop(0.85, 'rgba(0, 3, 10, 0.5)');
+  shade.addColorStop(1, 'rgba(0, 2, 7, 0.72)');
   ctx.fillStyle = shade;
   ctx.fillRect(cx - R, cy - R, R * 2, R * 2);
 
@@ -294,7 +294,7 @@ function drawPlanet(ctx, planet, time, ox, oy) {
     const by = cy - R + city.v * R * 2;
     const twinkle = 0.45 + 0.55 * (0.5 + 0.5 * Math.sin(time * 1.7 + city.phase));
     const darkSide = bx > cx ? 1 : 0.35;
-    ctx.globalAlpha = 0.3 * twinkle * darkSide;
+    ctx.globalAlpha = 0.45 * twinkle * darkSide;
     ctx.fillStyle = '#ffd08a';
     ctx.beginPath();
     ctx.arc(bx, by, 1.15, 0, TAU);
@@ -305,8 +305,8 @@ function drawPlanet(ctx, planet, time, ox, oy) {
   // inner limb glow
   const limb = ctx.createRadialGradient(cx, cy, R * 0.82, cx, cy, R);
   limb.addColorStop(0, 'rgba(70, 190, 255, 0)');
-  limb.addColorStop(0.86, 'rgba(80, 200, 255, 0.045)');
-  limb.addColorStop(1, 'rgba(120, 225, 255, 0.24)');
+  limb.addColorStop(0.86, 'rgba(90, 210, 255, 0.07)');
+  limb.addColorStop(1, 'rgba(140, 235, 255, 0.34)');
   ctx.fillStyle = limb;
   ctx.fillRect(cx - R, cy - R, R * 2, R * 2);
 
@@ -351,9 +351,9 @@ function drawAsteroids(ctx, asteroids, time, near) {
       else ctx.lineTo(p.x, p.y);
     });
     ctx.closePath();
-    ctx.fillStyle = near ? 'rgba(8, 17, 30, 0.92)' : 'rgba(5, 11, 21, 0.95)';
+    ctx.fillStyle = near ? 'rgba(18, 34, 56, 0.95)' : 'rgba(12, 24, 42, 0.97)';
     ctx.fill();
-    ctx.strokeStyle = near ? 'rgba(100, 176, 220, 0.22)' : 'rgba(90, 160, 210, 0.14)';
+    ctx.strokeStyle = near ? 'rgba(120, 200, 245, 0.4)' : 'rgba(105, 180, 230, 0.26)';
     ctx.lineWidth = 0.11;
     ctx.stroke();
 
@@ -373,8 +373,8 @@ function drawAsteroids(ctx, asteroids, time, near) {
 }
 
 export function createArenaRenderer() {
-  const far = makeStars(3, 190);
-  const near = makeStars(11, 80);
+  const far = makeStars(3, 240);
+  const near = makeStars(11, 110);
   const nebula = makeNebula();
   const planet = makePlanet();
   const asteroids = makeAsteroids();
@@ -383,7 +383,7 @@ export function createArenaRenderer() {
     const px = pointer.x || 0;
     const py = pointer.y || 0;
 
-    ctx.fillStyle = '#04060f';
+    ctx.fillStyle = '#060b19';
     ctx.fillRect(0, 0, ARENA.W, ARENA.H);
 
     // The star/nebula plates are painted once at the arena size they were
@@ -392,7 +392,7 @@ export function createArenaRenderer() {
     ctx.drawImage(nebula, 0, 0, ARENA.W, ARENA.H);
 
     ctx.save();
-    ctx.globalAlpha = 0.82;
+    ctx.globalAlpha = 0.95;
     ctx.drawImage(far, px * 3 - 8, py * 2 - 8, ARENA.W + 16, ARENA.H + 16);
     ctx.restore();
 
@@ -400,7 +400,7 @@ export function createArenaRenderer() {
     drawPlanet(ctx, planet, time, px * 8, py * 6);
 
     ctx.save();
-    ctx.globalAlpha = 0.34;
+    ctx.globalAlpha = 0.5;
     ctx.drawImage(near, -px * 4 - 8, -py * 3 - 8, ARENA.W + 16, ARENA.H + 16);
     ctx.restore();
 
@@ -420,30 +420,4 @@ export function createArenaRenderer() {
   return { draw };
 }
 
-export function drawVignette(ctx) {
-  const v = ctx.createRadialGradient(
-    ARENA.W / 2,
-    ARENA.H * 0.44,
-    ARENA.H * 0.16,
-    ARENA.W / 2,
-    ARENA.H * 0.48,
-    ARENA.H * 0.78
-  );
-  v.addColorStop(0, 'rgba(0,0,0,0)');
-  v.addColorStop(0.62, 'rgba(0,0,0,0.1)');
-  v.addColorStop(1, 'rgba(0,0,0,0.72)');
-  ctx.fillStyle = v;
-  ctx.fillRect(0, 0, ARENA.W, ARENA.H);
 
-  const top = ctx.createLinearGradient(0, 0, 0, 190);
-  top.addColorStop(0, 'rgba(2,5,12,0.6)');
-  top.addColorStop(1, 'rgba(2,5,12,0)');
-  ctx.fillStyle = top;
-  ctx.fillRect(0, 0, ARENA.W, 190);
-
-  const bottom = ctx.createLinearGradient(0, ARENA.H - 260, 0, ARENA.H);
-  bottom.addColorStop(0, 'rgba(2,4,10,0)');
-  bottom.addColorStop(1, 'rgba(2,4,10,0.7)');
-  ctx.fillStyle = bottom;
-  ctx.fillRect(0, ARENA.H - 260, ARENA.W, 260);
-}
