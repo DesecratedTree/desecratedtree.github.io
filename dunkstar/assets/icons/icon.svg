@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="DUNKSTAR">
+  <defs>
+    <radialGradient id="bg" cx="26%" cy="22%" r="90%">
+      <stop offset="0" stop-color="#0b2238"/>
+      <stop offset="0.55" stop-color="#061020"/>
+      <stop offset="1" stop-color="#04060f"/>
+    </radialGradient>
+    <radialGradient id="ball" cx="36%" cy="31%" r="74%">
+      <stop offset="0" stop-color="#ffd7a4"/>
+      <stop offset="0.38" stop-color="#ff9a3c"/>
+      <stop offset="0.82" stop-color="#c4490a"/>
+      <stop offset="1" stop-color="#6d1902"/>
+    </radialGradient>
+    <radialGradient id="halo" cx="50%" cy="50%" r="50%">
+      <stop offset="0.5" stop-color="#5cf4ff" stop-opacity="0.3"/>
+      <stop offset="1" stop-color="#5cf4ff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="spark" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#9ffcff" stop-opacity="0.75"/>
+      <stop offset="1" stop-color="#5cf4ff" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="ballclip">
+      <circle cx="256" cy="264" r="154"/>
+    </clipPath>
+  </defs>
+
+  <rect width="512" height="512" fill="url(#bg)"/>
+  <circle cx="256" cy="264" r="196" fill="url(#halo)"/>
+  <circle cx="256" cy="264" r="154" fill="url(#ball)"/>
+
+  <g clip-path="url(#ballclip)" fill="none" stroke="#3a0b02" stroke-width="7" stroke-linecap="round" opacity="0.74">
+    <path d="M256 110 V418"/>
+    <path d="M102 264 H410"/>
+    <circle cx="-83" cy="264" r="254"/>
+    <circle cx="595" cy="264" r="254"/>
+  </g>
+
+  <g clip-path="url(#ballclip)" fill="none" stroke="#9ffcff" stroke-linecap="round" opacity="0.5">
+    <path d="M364 250 A116 120 0 0 1 316 372" stroke-width="5"/>
+  </g>
+
+  <circle cx="397" cy="120" r="60" fill="url(#spark)"/>
+  <path d="M397 74 C404 104 412 112 442 120 C412 128 404 136 397 166 C390 136 382 128 352 120 C382 112 390 104 397 74 Z" fill="#dfffff"/>
+</svg>
