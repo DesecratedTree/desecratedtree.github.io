@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#04060f">
+  <meta name="color-scheme" content="dark">
+  <title>DUNKSTAR — Neon Space Basketball</title>
+  <link rel="stylesheet" href="./styles.css?v=11">
+</head>
+<body>
+  <div id="app">
+    <div id="stage">
+      <canvas id="game" width="1280" height="720" aria-label="Dunkstar arcade basketball court"></canvas>
+
+      <div id="hud" class="hud hidden">
+        <div class="hud-top">
+          <div class="hud-timer">
+            <span class="hud-label">TIME</span>
+            <span id="timer" class="timer">2:00</span>
+            <div id="pips" class="pips" role="img" aria-label="Backboard panels lit: 0 of 4">
+              <i></i><i></i><i></i><i></i>
+            </div>
+          </div>
+
+          <div class="hud-score">
+            <span class="hud-label">SCORE</span>
+            <span id="score" class="score">0</span>
+            <span id="best-hud" class="hud-best">BEST 0</span>
+          </div>
+
+          <div class="hud-buttons">
+            <button id="btn-mute" class="icon-btn" type="button" aria-label="Mute sound" title="Sound">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path class="spk" d="M4 9.5v5h3.4L13 19V5L7.4 9.5H4z"></path>
+                <path class="wave" d="M16.2 8.4a5 5 0 0 1 0 7.2M18.9 5.7a8.8 8.8 0 0 1 0 12.6"></path>
+                <path class="slash" d="M5 5l14 14"></path>
+              </svg>
+            </button>
+            <button id="btn-pause" class="icon-btn" type="button" aria-label="Pause game" title="Pause">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path class="fill" d="M7 5h3.6v14H7zM13.4 5H17v14h-3.6z"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="streak" id="streak">
+          <div class="streak-top">
+            <span id="streak-name">CLEAN SHOT</span>
+            <span id="streak-mult">×1.0</span>
+          </div>
+          <div class="streak-track"><div id="streak-fill"></div></div>
+        </div>
+
+        <div id="powerups" class="powerups" aria-live="polite"></div>
+
+        <div id="hint" class="hint">
+          <span class="hint-arrow">&#8599;</span>
+          <span>DRAG TO AIM &middot; RELEASE TO SHOOT</span>
+        </div>
+      </div>
+
+      <div id="callout" class="callout hidden" aria-live="assertive">
+        <span id="callout-main" class="callout-main"></span>
+        <span id="callout-sub" class="callout-sub"></span>
+      </div>
+
+      <div id="flash" class="flash"></div>
+
+      <div id="screens" class="screens">
+        <section id="title-screen" class="screen screen-title">
+          <button id="btn-balls" class="title-ball-btn" type="button" aria-haspopup="dialog" aria-controls="balls-screen">
+            <img src="./assets/basketball.png" alt="">
+            <span>BALLS</span>
+          </button>
+          <div class="title-orbit" aria-hidden="true"></div>
+          <div class="title-content">
+            <div class="eyebrow"><span class="eyebrow-dot"></span>NEON SPACE BASKETBALL<span class="eyebrow-dot"></span></div>
+            <h1 class="logo" aria-label="Dunkstar"><span class="logo-dunk">DUNK</span><span class="logo-star">STAR</span></h1>
+            <p class="tagline">Two minutes. One hoop.<br>No gravity holding you back.</p>
+            <button id="btn-play" class="cta" type="button">
+              <span>PLAY</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path class="fill" d="M8 5.5l11 6.5-11 6.5z"></path></svg>
+            </button>
+            <div class="title-meta">
+              <span>BEST <b id="best-title">0</b></span>
+              <span class="sep"></span>
+              <span>2:00 RUN</span>
+            </div>
+            <div class="how">
+              <div class="how-item"><b>01</b><span>Swipe up-right<br>to launch</span></div>
+              <div class="how-item"><b>02</b><span>Light all<br>4 panels</span></div>
+              <div class="how-item"><b>03</b><span>Chain clean<br>shots</span></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="balls-screen" class="screen screen-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="balls-title">
+          <div class="panel panel-balls">
+            <div class="eyebrow">YOUR LOCKER</div>
+            <h2 id="balls-title" class="panel-title">SELECT BALL</h2>
+            <div id="ball-grid" class="ball-grid"></div>
+            <p id="ball-note" class="ball-note">MORE BALLS COMING SOON</p>
+            <button id="btn-balls-back" class="ghost-btn" type="button">BACK</button>
+          </div>
+        </section>
+
+        <section id="results-screen" class="screen screen-overlay hidden">
+          <div class="panel">
+            <div class="eyebrow">FINAL BUZZER</div>
+            <h2 class="panel-title">TIME</h2>
+            <div class="result-score" id="result-score">0</div>
+            <div class="new-best hidden" id="new-best">NEW PERSONAL BEST</div>
+            <div class="stats">
+              <div class="stat"><span>BASKETS</span><b id="stat-baskets">0</b></div>
+              <div class="stat"><span>ACCURACY</span><b id="stat-accuracy">0%</b></div>
+              <div class="stat"><span>BEST CLEAN</span><b id="stat-streak">0</b></div>
+              <div class="stat"><span>BEST SCORE</span><b id="stat-best">0</b></div>
+            </div>
+            <button id="btn-again" class="cta" type="button"><span>PLAY AGAIN</span></button>
+            <button id="btn-menu" class="ghost-btn" type="button">MENU</button>
+          </div>
+        </section>
+
+        <section id="pause-screen" class="screen screen-overlay hidden">
+          <div class="panel panel-compact">
+            <div class="eyebrow">PAUSED</div>
+            <h2 class="panel-title">HOLD UP</h2>
+            <p class="panel-copy">The clock is frozen. Your shot is not.</p>
+            <button id="btn-resume" class="cta" type="button"><span>RESUME</span></button>
+            <button id="btn-quit" class="ghost-btn" type="button">QUIT TO MENU</button>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

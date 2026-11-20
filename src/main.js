@@ -1,0 +1,206 @@
+import { ARENA } from './config.js';
+import { Game } from './game.js';
+import { UI } from './ui.js';
+import { AudioEngine } from './audio.js';
+
+const stage = document.getElementById('stage');
+const canvas = document.getElementById('game');
+const ui = new UI();
+const audio = new AudioEngine();
+const game = new Game({ canvas, ui, audio });
+
+function layout() {
+  const vw = Math.max(1, window.innerWidth);
+  const vh = Math.max(1, window.innerHeight);
+  // Letterbox to an exact 16:9 stage. Never force a minimum height here: on a
+  // portrait phone that used to stretch 16:9 game units into a taller box.
+  const scale = Math.min(vw / ARENA.W, vh / ARENA.H);
+  const w = Math.max(1, Math.floor(ARENA.W * scale));
+  const h = Math.max(1, Math.floor(ARENA.H * scale));
+  stage.style.width = `${w}px`;
+  stage.style.height = `${h}px`;
+  stage.style.setProperty('--s', (w / ARENA.W).toFixed(5));
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  game.resize(w, h, dpr);
+}
+
+ui.bind({
+  play: () => {
+    audio.unlock();
+    audio.play('ui');
+    game.startRun();
+  },
+  menu: () => {
+    audio.play('ui');
+    game.quitToMenu();
+  },
+  resume: () => {
+    audio.play('ui');
+    game.resume();
+  },
+  quit: () => {
+    audio.play('ui');
+    game.quitToMenu();
+  },
+  pause: () => {
+    audio.play('ui');
+    game.togglePause();
+  },
+  mute: () => {
+    game.toggleMute();
+  },
+  balls: () => {
+    audio.play('ui');
+    game.openBalls();
+  },
+  closeBalls: () => {
+    audio.play('ui');
+    game.closeBalls();
+  },
+});
+
+window.addEventListener('keydown', (e) => {
+  if (e.repeat) return;
+  const key = e.key.toLowerCase();
+
+  if (key === ' ' || key === 'enter') {
+    if (game.state === 'title' || game.state === 'results') {
+      e.preventDefault();
+      audio.unlock();
+      audio.play('ui');
+      game.startRun();
+    } else if (game.paused) {
+      e.preventDefault();
+      game.resume();
+    }
+  }
+
+  if (key === 'escape' || key === 'p') {
+    e.preventDefault();
+    game.togglePause();
+  }
+
+  if (key === 'm') {
+    game.toggleMute();
+  }
+});
+
+window.addEventListener('resize', layout);
+window.addEventListener('orientationchange', () => setTimeout(layout, 120));
+if (window.visualViewport) {
+  window.visualViewport.addEventListener('resize', layout);
+}
+
+document.addEventListener('visibilitychange', () => {
+  game.handleHidden();
+});
+
+layout();
+
+let last = performance.now();
+function loop(now) {
+  const dt = (now - last) / 1000;
+  last = now;
+  game.frame(dt);
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame((now) => {
+  last = now;
+  requestAnimationFrame(loop);
+});
+
+if (new URLSearchParams(window.location.search).has('debug')) {
+  const ensurePlay = () => {
+    if (game.state === 'title' || game.state === 'results') {
+      game.startRun();
+      game.beginPlay();
+    } else if (game.state === 'countdown') {
+      game.beginPlay();
+    }
+  };
+
+  const drag = (x0, y0, x1, y1) => {
+    ensurePlay();
+    const rect = canvas.getBoundingClientRect();
+    const toClient = (x, y) => ({
+      clientX: rect.left + (x / ARENA.W) * rect.width,
+      clientY: rect.top + (y / ARENA.H) * rect.height,
+    });
+    const a = toClient(x0, y0);
+    const b = toClient(x1, y1);
+    const base = { pointerId: 7, pointerType: 'touch', bubbles: true, cancelable: true, isPrimary: true };
+    canvas.dispatchEvent(new PointerEvent('pointerdown', { ...base, ...a, buttons: 1 }));
+    window.dispatchEvent(new PointerEvent('pointermove', { ...base, ...b, buttons: 1 }));
+    window.dispatchEvent(new PointerEvent('pointerup', { ...base, ...b, buttons: 0 }));
+    return game.debugSummary();
+  };
+
+  window.__dunkstar = {
+    game,
+    ui,
+    play: () => {
+      game.startRun();
+      game.beginPlay();
+    },
+    start: () => game.startRun(),
+    skip: () => game.beginPlay(),
+    state: () => game.debugSummary(),
+    shootAt: (tx, ty) => {
+      ensurePlay();
+      return game.debugShootAt(tx, ty);
+    },
+    shootCenter: () => {
+      ensurePlay();
+      const h = game.world.hoop;
+      return game.debugShootAt(h.cx, h.cy);
+    },
+    shootRim: () => {
+      ensurePlay();
+      const h = game.world.hoop;
+      return game.debugShootAt(h.cx - h.half, h.cy);
+    },
+    shootBoard: (i = 1) => {
+      ensurePlay();
+      const p = game.world.hoop.panels[i];
+      return game.debugShootAt((p.ax + p.bx) / 2, (p.ay + p.by) / 2);
+    },
+    drag,
+    advance: (seconds = 1) => {
+      const n = Math.max(1, Math.round(seconds / (1 / 120)));
+      for (let i = 0; i < n; i++) game.step(1 / 120);
+      game.updateVisual(1 / 60);
+      game.effects.update(1 / 60);
+      game.render(0.5);
+      return game.debugSummary();
+    },
+    shootPoint: (tx, ty, time = 0.9) => {
+      ensurePlay();
+      return game.debugLaunchAtPoint(tx, ty, time);
+    },
+    panel: (i) => game.debugHitPanel(i),
+    powerup: (type) => game.debugGrantPowerup(type),
+    setTime: (t) => game.debugSetTime(t),
+    kill: () => game.world.killBalls(),
+    ready: () => game.world.forceReady(),
+    pause: () => game.pause(),
+    resume: () => game.resume(),
+    menu: () => game.quitToMenu(),
+    balls: () => game.openBalls(),
+    selectBall: (id) => game.selectBall(id),
+    closeBalls: () => game.closeBalls(),
+    mute: () => game.toggleMute(),
+    screens: () => ({
+      title: !ui.title.classList.contains('hidden'),
+      results: !ui.results.classList.contains('hidden'),
+      pause: !ui.pause.classList.contains('hidden'),
+      balls: !ui.ballsScreen.classList.contains('hidden'),
+      hud: !ui.hud.classList.contains('hidden'),
+    }),
+    canvas: () => ({
+      width: canvas.width,
+      height: canvas.height,
+      cssWidth: canvas.getBoundingClientRect().width,
+      cssHeight: canvas.getBoundingClientRect().height,
+    }),
+  };
+}
