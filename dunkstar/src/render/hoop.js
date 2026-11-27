@@ -235,9 +235,37 @@ function drawNet(ctx, hoop, net, netFlash) {
   ctx.restore();
 }
 
+function drawBlackHole(ctx, hoop, time) {
+  const r = hoop.half * 0.78;
+  ctx.save();
+  const g = ctx.createRadialGradient(hoop.cx, hoop.cy - 6, 2, hoop.cx, hoop.cy - 6, r * 1.5);
+  g.addColorStop(0, 'rgba(3, 0, 10, 0.94)');
+  g.addColorStop(0.55, 'rgba(58, 14, 118, 0.5)');
+  g.addColorStop(1, 'rgba(150, 80, 255, 0)');
+  ctx.fillStyle = g;
+  ctx.beginPath();
+  ctx.arc(hoop.cx, hoop.cy - 6, r * 1.5, 0, TAU);
+  ctx.fill();
+
+  for (let i = 0; i < 3; i++) {
+    const spin = time * (1.6 + i * 0.6) + i * 2.1;
+    const radius = r * (1 - i * 0.17);
+    ctx.beginPath();
+    ctx.ellipse(hoop.cx, hoop.cy - 6, radius, radius * 0.55, spin, 0, TAU);
+    ctx.strokeStyle = `rgba(176, 124, 255, ${0.34 - i * 0.08})`;
+    ctx.lineWidth = 2;
+    ctx.shadowColor = 'rgba(176, 124, 255, 0.8)';
+    ctx.shadowBlur = 12;
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
 export function drawHoopBack(ctx, scene) {
   const { hoop, panels, panelPulse, net, netFlash, powerups, time } = scene;
   drawMount(ctx, hoop);
+
+  if (powerups && powerups.has('blackHole')) drawBlackHole(ctx, hoop, time);
 
   if (powerups && powerups.has('bigRim')) {
     ctx.save();

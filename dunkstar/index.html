@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
   <meta name="theme-color" content="#04060f">
   <meta name="color-scheme" content="dark">
-  <meta name="description" content="DUNKSTAR — a two-minute neon space-basketball shootout. Drag to aim, chain clean shots and light all four backboard panels.">
+  <meta name="description" content="DUNKSTAR — a two-minute neon space-basketball shootout. Drag to aim, chain baskets and light all four backboard panels.">
   <title>DUNKSTAR</title>
 
   <!-- Installable app shell: home-screen icon, fullscreen launch, offline play. -->
@@ -17,7 +17,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="./assets/icons/icon-180.png">
   <link rel="icon" type="image/svg+xml" href="./assets/icons/icon.svg">
 
-  <link rel="stylesheet" href="./styles.css?v=14">
+  <link rel="stylesheet" href="./styles.css?v=15">
 </head>
 <body>
   <div id="app">
@@ -38,6 +38,7 @@
             <span class="hud-label">SCORE</span>
             <span id="score" class="score">0</span>
             <span id="best-hud" class="hud-best">BEST 0</span>
+            <span id="hud-diff" class="hud-diff">NORMAL</span>
           </div>
 
           <div class="hud-buttons">
@@ -58,7 +59,7 @@
 
         <div class="streak" id="streak">
           <div class="streak-top">
-            <span id="streak-name">CLEAN SHOT</span>
+            <span id="streak-name">MAKE STREAK</span>
             <span id="streak-mult">×1.0</span>
           </div>
           <div class="streak-track"><div id="streak-fill"></div></div>
@@ -89,6 +90,17 @@
           <div class="title-content">
             <h1 class="logo" aria-label="Dunkstar"><span class="logo-dunk">DUNK</span><span class="logo-star">STAR</span></h1>
             <p class="tagline">Two minutes. One hoop.<br>No gravity holding you back.</p>
+            <div id="difficulty" class="difficulty" role="group" aria-label="Difficulty">
+              <button class="diff-btn" type="button" data-difficulty="easy" aria-pressed="false">
+                <b>EASY</b><span>85% ARC &middot; -25%</span>
+              </button>
+              <button class="diff-btn active" type="button" data-difficulty="normal" aria-pressed="true">
+                <b>NORMAL</b><span>CURRENT ARC</span>
+              </button>
+              <button class="diff-btn" type="button" data-difficulty="hard" aria-pressed="false">
+                <b>HARD</b><span>35% ARC &middot; +25%</span>
+              </button>
+            </div>
             <button id="btn-play" class="cta" type="button">
               <span>PLAY</span>
               <svg viewBox="0 0 24 24" aria-hidden="true"><path class="fill" d="M8 5.5l11 6.5-11 6.5z"></path></svg>
@@ -101,7 +113,7 @@
             <div class="how">
               <div class="how-item"><b>01</b><span>Swipe up-right<br>to launch</span></div>
               <div class="how-item"><b>02</b><span>Light all<br>4 panels</span></div>
-              <div class="how-item"><b>03</b><span>Chain clean<br>shots</span></div>
+              <div class="how-item"><b>03</b><span>Keep making<br>baskets</span></div>
             </div>
           </div>
         </section>
@@ -125,7 +137,7 @@
             <div class="stats">
               <div class="stat"><span>BASKETS</span><b id="stat-baskets">0</b></div>
               <div class="stat"><span>ACCURACY</span><b id="stat-accuracy">0%</b></div>
-              <div class="stat"><span>BEST CLEAN</span><b id="stat-streak">0</b></div>
+              <div class="stat"><span>BEST STREAK</span><b id="stat-streak">0</b></div>
               <div class="stat"><span>BEST SCORE</span><b id="stat-best">0</b></div>
             </div>
             <button id="btn-again" class="cta" type="button"><span>PLAY AGAIN</span></button>

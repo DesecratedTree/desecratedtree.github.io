@@ -90,18 +90,36 @@ export const PAD_MIN_DIST = 400;
 export const PAD_MIN_DX = 300;
 
 export const SCORE = {
-  basket: 100,
-  cleanBonus: 100,   // a swish is worth 200 base
-  streakStep: 0.5,   // each consecutive clean make adds 0.5x
+  swish: 500,         // a clean make: nothing but net
+  rimBasket: 200,     // a make that touched the rim or the backboard
+  panelHit: 50,       // every backboard tile struck
+  panelSetBonus: 500, // lighting all four tiles (also grants a power-up)
+  streakStep: 0.5,    // each consecutive make adds 0.5x, swish or not
   maxMult: 10,
   doubleMult: 2,
   panelResetDelay: 0.55,
 };
 
+// Difficulty controls how much of the real shot arc the aim guide reveals and
+// a flat score modifier applied to every award.
+export const DIFFICULTY = {
+  easy: { label: 'EASY', guideFraction: 0.85, scoreMult: 0.75, note: '85% ARC · -25% SCORE' },
+  normal: { label: 'NORMAL', guideFraction: 0.67, scoreMult: 1, note: 'CURRENT ARC · 100% SCORE' },
+  hard: { label: 'HARD', guideFraction: 0.35, scoreMult: 1.25, note: '35% ARC · +25% SCORE' },
+};
+
+export const DIFFICULTY_KEYS = ['easy', 'normal', 'hard'];
+export const DEFAULT_DIFFICULTY = 'normal';
+
+export function difficultyFor(key) {
+  return DIFFICULTY[key] || DIFFICULTY[DEFAULT_DIFFICULTY];
+}
+
 export const POWERUPS = {
   bigRim: { duration: 10, label: 'BIG RIM', tag: 'RIM', color: '#c184ff' },
   multiball: { duration: 12, label: 'MULTIBALL', tag: 'TRIO', color: '#5cf4ff' },
   double: { duration: 10, label: 'DOUBLE SCORE', tag: '×2', color: '#ffd166' },
+  blackHole: { duration: 10, label: 'BLACK HOLE', tag: 'VOID', color: '#b07cff' },
 };
 
 export const POWERUP_KEYS = Object.keys(POWERUPS);

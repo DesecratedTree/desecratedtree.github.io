@@ -76,6 +76,10 @@ ui.bind({
     audio.play('ui');
     game.closeBalls();
   },
+  difficulty: (key) => {
+    audio.play('ui');
+    game.setDifficulty(key);
+  },
 });
 
 window.addEventListener('keydown', (e) => {
@@ -208,6 +212,7 @@ if (new URLSearchParams(window.location.search).has('debug')) {
       return game.debugLaunchAtPoint(tx, ty, time);
     },
     panel: (i) => game.debugHitPanel(i),
+    difficulty: (key) => game.setDifficulty(key),
     powerup: (type) => game.debugGrantPowerup(type),
     setTime: (t) => game.debugSetTime(t),
     kill: () => game.world.killBalls(),

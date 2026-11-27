@@ -213,6 +213,17 @@ body {
   color: rgba(190, 222, 242, 0.64);
 }
 
+.hud-diff {
+  display: inline-block;
+  margin-top: calc(6px * var(--s));
+  padding: calc(3px * var(--s)) calc(10px * var(--s));
+  border: 1px solid rgba(122, 216, 255, 0.26);
+  border-radius: 999px;
+  font-size: calc(12px * var(--s));
+  letter-spacing: 0.2em;
+  color: rgba(190, 230, 250, 0.78);
+}
+
 .hud-buttons {
   justify-self: end;
   display: flex;
@@ -575,6 +586,64 @@ body {
   font-weight: 400;
 }
 
+.difficulty {
+  display: flex;
+  gap: calc(6px * var(--s));
+  margin-top: calc(16px * var(--s));
+  padding: calc(4px * var(--s));
+  border: 1px solid rgba(120, 205, 240, 0.16);
+  background: rgba(6, 14, 26, 0.55);
+  backdrop-filter: blur(4px);
+}
+
+.diff-btn {
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(3px * var(--s));
+  padding: calc(7px * var(--s)) calc(18px * var(--s));
+  border: 1px solid transparent;
+  background: transparent;
+  color: rgba(178, 214, 236, 0.66);
+  font-family: var(--font);
+  font-size: calc(15px * var(--s));
+  letter-spacing: 0.16em;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s, box-shadow 0.15s;
+}
+
+.diff-btn b {
+  font-weight: 700;
+  letter-spacing: 0.2em;
+}
+
+.diff-btn span {
+  font-size: calc(10px * var(--s));
+  letter-spacing: 0.06em;
+  color: rgba(158, 200, 224, 0.5);
+}
+
+.diff-btn:hover {
+  color: #fff;
+  border-color: rgba(92, 244, 255, 0.3);
+}
+
+.diff-btn.active {
+  border-color: rgba(92, 244, 255, 0.55);
+  background: rgba(92, 244, 255, 0.1);
+  color: #fff;
+  box-shadow: 0 0 calc(22px * var(--s)) rgba(92, 244, 255, 0.12);
+}
+
+.diff-btn.active span {
+  color: var(--cyan);
+}
+
+.difficulty + .cta {
+  margin-top: calc(14px * var(--s));
+}
+
 .cta {
   position: relative;
   display: inline-flex;
@@ -644,8 +713,8 @@ body {
   grid-template-columns: repeat(3, 1fr);
   gap: calc(12px * var(--s));
   width: 100%;
-  margin-top: calc(42px * var(--s));
-  padding-top: calc(26px * var(--s));
+  margin-top: calc(22px * var(--s));
+  padding-top: calc(22px * var(--s));
   border-top: 1px solid rgba(120, 205, 240, 0.14);
 }
 
@@ -687,6 +756,8 @@ body {
 
 .panel-balls {
   max-width: calc(820px * var(--s));
+  max-height: calc(100% - 32px);
+  overflow-y: auto;
 }
 
 .ball-grid {
@@ -1226,6 +1297,32 @@ body {
     margin-top: max(calc(30px * var(--s)), 16px);
     padding: max(calc(23px * var(--s)), 13px) max(calc(66px * var(--s)), 40px);
     font-size: max(calc(31px * var(--s)), 17px);
+  }
+
+  .difficulty {
+    gap: 4px;
+    margin-top: 12px;
+    padding: 4px;
+  }
+
+  .diff-btn {
+    padding: 7px 10px;
+    font-size: max(calc(15px * var(--s)), 9px);
+    letter-spacing: 0.1em;
+  }
+
+  .diff-btn span {
+    font-size: max(calc(10px * var(--s)), 7px);
+    letter-spacing: 0.02em;
+  }
+
+  .difficulty + .cta {
+    margin-top: 14px;
+  }
+
+  .hud-diff {
+    font-size: max(calc(12px * var(--s)), 7px);
+    padding: 2px 7px;
   }
 
   .title-meta,

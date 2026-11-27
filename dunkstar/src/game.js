@@ -4,6 +4,8 @@ import {
   SHOT,
   TIME,
   POWERUPS,
+  DIFFICULTY,
+  difficultyFor,
   clamp,
   formatScore,
 } from './config.js';
@@ -31,6 +33,9 @@ export class Game {
     this.arena = createArenaRenderer();
     this.effects = new Effects();
     this.best = Storage.getBest();
+    const savedDifficulty = Storage.getDifficulty();
+    this.difficulty = DIFFICULTY[savedDifficulty] ? savedDifficulty : 'normal';
+    this.world.difficulty = this.difficulty;
     const savedBall = ballById(Storage.getBallId());
     this.ballId = savedBall && isBallUnlocked(savedBall, this.best) ? savedBall.id : DEFAULT_BALL;
     preloadBallImages();
@@ -58,7 +63,7 @@ export class Game {
 
     this.events = {
       onRim: (ball, impact) => this.onRim(ball, impact),
-      onPanel: (ball, i, impact, type) => this.onPanel(ball, i, impact, type),
+      onPanel: (ball, i, impact, res) => this.onPanel(ball, i, impact, res),
       onScore: (ball, res) => this.onScore(ball, res),
       onMiss: (ball) => this.onMiss(ball),
       onPowerupEnd: () => this.ui.syncPowerups(this.world.powerups),
@@ -76,6 +81,7 @@ export class Game {
     this.ui.setMuted(this.audio.muted);
     this.ui.showTitle(this.best);
     this.ui.setBallButton(this.ballId);
+    this.ui.setDifficulty(this.difficulty);
   }
 
   // ------------------------------- lifecycle -------------------------------
@@ -97,6 +103,7 @@ export class Game {
   startRun() {
     this.audio.unlock();
     this.ui.hideBalls();
+    this.world.difficulty = this.difficulty;
     this.world.reset();
     this.world.autoSpawn = true;
     this.state = 'countdown';
@@ -257,6 +264,16 @@ export class Game {
     return true;
   }
 
+  setDifficulty(key) {
+    if (!DIFFICULTY[key]) return false;
+    if (this.state !== 'title' && this.state !== 'results') return false;
+    this.difficulty = key;
+    this.world.difficulty = key;
+    Storage.setDifficulty(key);
+    this.ui.setDifficulty(key);
+    return true;
+  }
+
   toggleMute() {
     const muted = !this.audio.muted;
     this.audio.setMuted(muted);
@@ -403,7 +420,7 @@ export class Game {
     this.effects.shake(Math.min(4, impact / 320));
   }
 
-  onPanel(ball, i, impact, type) {
+  onPanel(ball, i, impact, res) {
     this.audio.play('board');
     this.effects.burst(ball.x, ball.y, {
       count: 10,
@@ -416,7 +433,16 @@ export class Game {
       spread: Math.PI,
     });
     this.effects.shake(3.6);
-    if (type) this.announcePowerup(type);
+    if (res && res.points > 0) {
+      this.effects.float(ball.x, ball.y - 26, `+${formatScore(res.points)}`, '#9ffcff', 21, 0.85, -46);
+    }
+    if (res && res.complete) {
+      const hoop = this.world.hoop;
+      this.effects.float(hoop.cx, hoop.cy - 130, 'ALL 4 TILES', '#ffd166', 22, 1.15, -34);
+      this.audio.play('swish');
+    }
+    if (res && res.type) this.announcePowerup(res.type);
+    this.ui.setScore(this.world.score, true);
   }
 
   onScore(ball, res) {
@@ -442,17 +468,16 @@ export class Game {
       clean ? 34 : 30,
       1.0
     );
-    if (clean) {
-      this.effects.float(
-        ball.scoreX,
-        hoop.cy - 62,
-        res.mult > 1 ? `SWISH ×${res.mult.toFixed(1)}` : 'SWISH',
-        '#ffd166',
-        18,
-        1.05,
-        -42
-      );
-    }
+    const label = res.mult > 1 ? `STREAK ×${res.mult.toFixed(1)}` : clean ? 'SWISH' : 'BASKET';
+    this.effects.float(
+      ball.scoreX,
+      hoop.cy - 62,
+      label,
+      clean ? '#ffd166' : '#ffb347',
+      18,
+      1.05,
+      -42
+    );
     if (res.power > 1) {
       this.effects.float(ball.scoreX, hoop.cy - 96, 'DOUBLE', '#ffd166', 16, 0.9, -30);
     }
@@ -631,7 +656,14 @@ export class Game {
     // ball and its pad out of the how-to row behind the title copy.
     const showReady = this.state !== 'title';
     if (this.aim && this.world.readyBall && showReady) {
-      drawAim(ctx, this.world.readyBall, this.aim, this.visualTime, hoop);
+      drawAim(
+        ctx,
+        this.world.readyBall,
+        this.aim,
+        this.visualTime,
+        hoop,
+        difficultyFor(this.difficulty).guideFraction
+      );
     }
 
     for (const ball of this.world.balls) {
@@ -716,10 +748,11 @@ export class Game {
   }
 
   debugHitPanel(i) {
-    const type = this.world.forcePanel(i);
+    const res = this.world.forcePanel(i);
     this.ui.setPanels(this.world.panels);
-    if (type) this.announcePowerup(type);
-    return type;
+    this.ui.setScore(this.world.score, true);
+    if (res && res.type) this.announcePowerup(res.type);
+    return res;
   }
 
   debugGrantPowerup(type) {
@@ -739,6 +772,7 @@ export class Game {
     return {
       state: this.state,
       ballId: this.ballId,
+      difficulty: this.difficulty,
       paused: this.paused,
       timeLeft: Math.round(this.timeLeft * 100) / 100,
       timeScale: this.timeScale,

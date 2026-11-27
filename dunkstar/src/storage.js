@@ -1,6 +1,7 @@
 const BEST_KEY = 'dunkstar.best';
 const MUTE_KEY = 'dunkstar.muted';
 const BALL_KEY = 'dunkstar.ball';
+const DIFFICULTY_KEY = 'dunkstar.difficulty';
 
 function read(key, fallback) {
   try {
@@ -38,5 +39,11 @@ export const Storage = {
   },
   setBallId(id) {
     write(BALL_KEY, id);
+  },
+  getDifficulty() {
+    return read(DIFFICULTY_KEY, 'normal');
+  },
+  setDifficulty(key) {
+    write(DIFFICULTY_KEY, key);
   },
 };

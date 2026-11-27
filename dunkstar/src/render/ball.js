@@ -66,13 +66,15 @@ export function drawBall(ctx, ball, { alpha = 1, streak = 0, powerups = null, re
   const y = ready ? ball.y : ball.py + (ball.y - ball.py) * alpha;
   const r = ball.r;
   const hot = streak >= 3;
-  const aura = powerups && powerups.has('double')
-    ? '#ffd166'
-    : powerups && powerups.has('multiball')
-      ? '#5cf4ff'
-      : hot
-        ? '#ff9a3c'
-        : 'rgba(92,244,255,0.5)';
+  const aura = powerups && powerups.has('blackHole')
+    ? '#b07cff'
+    : powerups && powerups.has('double')
+      ? '#ffd166'
+      : powerups && powerups.has('multiball')
+        ? '#5cf4ff'
+        : hot
+          ? '#ff9a3c'
+          : 'rgba(92,244,255,0.5)';
 
   ctx.save();
   ctx.globalAlpha = alpha;
@@ -238,7 +240,7 @@ export function buildAimPath(x, y, vx, vy, plane, fraction = SHOT.guideFraction)
   return { points, total, preview: limit };
 }
 
-export function drawAim(ctx, ball, aim, time, hoop = null) {
+export function drawAim(ctx, ball, aim, time, hoop = null, fraction = SHOT.guideFraction) {
   if (!ball || !aim) return;
   const x = ball.x;
   const y = ball.y;
@@ -246,7 +248,7 @@ export function drawAim(ctx, ball, aim, time, hoop = null) {
   const valid = aim.valid;
   const color = valid ? '#9ffcff' : '#ff5c82';
   const plane = hoop ? hoop.cy : y + 240;
-  const { points } = buildAimPath(x, y, aim.vx, aim.vy, plane);
+  const { points } = buildAimPath(x, y, aim.vx, aim.vy, plane, fraction);
 
   ctx.save();
 

@@ -1,4 +1,4 @@
-import { POWERUPS, formatScore, formatTime } from './config.js';
+import { POWERUPS, DIFFICULTY, formatScore, formatTime } from './config.js';
 import { ballById } from './balls.js';
 import { drawProceduralBall } from './render/ball-skins.js';
 import { streakMultiplier } from './scoring.js';
@@ -11,6 +11,8 @@ export class UI {
     this.timer = $('timer');
     this.score = $('score');
     this.bestHud = $('best-hud');
+    this.hudDiff = $('hud-diff');
+    this.diffButtons = [...document.querySelectorAll('.diff-btn')];
     this.streak = $('streak');
     this.streakName = $('streak-name');
     this.streakMult = $('streak-mult');
@@ -63,6 +65,9 @@ export class UI {
     $('btn-mute').addEventListener('click', () => handlers.mute());
     $('btn-balls').addEventListener('click', () => handlers.balls());
     $('btn-balls-back').addEventListener('click', () => handlers.closeBalls());
+    for (const btn of this.diffButtons) {
+      btn.addEventListener('click', () => handlers.difficulty(btn.dataset.difficulty));
+    }
   }
 
   showTitle(best) {
@@ -119,6 +124,16 @@ export class UI {
   setMuted(muted) {
     this.btnMute.classList.toggle('muted', muted);
     this.btnMute.setAttribute('aria-label', muted ? 'Unmute sound' : 'Mute sound');
+  }
+
+  setDifficulty(key) {
+    const def = DIFFICULTY[key] || DIFFICULTY.normal;
+    for (const btn of this.diffButtons) {
+      const active = btn.dataset.difficulty === key;
+      btn.classList.toggle('active', active);
+      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+    }
+    if (this.hudDiff) this.hudDiff.textContent = def.label;
   }
 
   showBalls(balls, selected, best, onSelect) {
@@ -238,7 +253,7 @@ export class UI {
 
   setStreak(streak) {
     const mult = streakMultiplier(streak);
-    this.streakName.textContent = streak > 0 ? `CLEAN × ${streak}` : 'CLEAN SHOT';
+    this.streakName.textContent = streak > 0 ? `MAKE STREAK × ${streak}` : 'MAKE STREAK';
     this.streakMult.textContent = `× ${mult.toFixed(1)}`;
     this.streakFill.style.width = `${Math.min(100, (streak / 19) * 100)}%`;
     this.streak.classList.toggle('hot', streak >= 3);

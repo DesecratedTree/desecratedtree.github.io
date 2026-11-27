@@ -14,11 +14,15 @@ import {
   hoopFor,
   mirrorX,
 } from './config.js';
-import { basketValue } from './scoring.js';
+import { adjustScore, basketValue } from './scoring.js';
 import { stepBall } from './physics.js';
 
 const STRANDS = 10;
 const LEVELS = 5;
+
+// A black-hole ball warps from its launch pad to just above the rim, then
+// drops straight through the score window.
+const PORTAL = { duration: 0.42, lift: 150, drop: 800, arc: 46 };
 
 function anchorFor(hoop, s) {
   const a = (s / STRANDS) * Math.PI * 2;
@@ -135,6 +139,29 @@ function netImpulse(net, x, y, strength = 1) {
   }
 }
 
+function stepPortal(ball, dt, hoop) {
+  const p = ball.portal;
+  p.t += dt;
+  const k = Math.min(1, p.t / PORTAL.duration);
+  const ease = k * k * (3 - 2 * k);
+  const targetY = hoop.cy - PORTAL.lift;
+
+  ball.px = ball.x;
+  ball.py = ball.y;
+  ball.x = p.fromX + (hoop.cx - p.fromX) * ease;
+  ball.y = p.fromY + (targetY - p.fromY) * ease - Math.sin(k * Math.PI) * PORTAL.arc;
+  ball.rot += dt * 16;
+  ball.age += dt;
+
+  if (k >= 1) {
+    ball.portal = null;
+    ball.x = hoop.cx;
+    ball.y = targetY;
+    ball.vx = 0;
+    ball.vy = PORTAL.drop;
+  }
+}
+
 function makeBall(x, y, ready = false) {
   return {
     x,
@@ -163,6 +190,7 @@ function makeBall(x, y, ready = false) {
 
 export class World {
   constructor() {
+    this.difficulty = 'normal';
     this.hoop = hoopFor(false);
     this.net = makeNet(this.hoop);
     this.autoSpawn = true;
@@ -336,6 +364,9 @@ export class World {
       ball.vx = Math.cos(a) * speed;
       ball.vy = Math.sin(a) * speed;
       ball.spin = clamp(-ball.vx / 55, -14, 14);
+      if (this.hasPowerup('blackHole')) {
+        ball.portal = { t: 0, fromX: ball.x, fromY: ball.y };
+      }
       spawned.push(ball);
     }
 
@@ -349,17 +380,16 @@ export class World {
 
   awardBasket(clean) {
     this.baskets += 1;
-    if (clean) {
-      this.streak += 1;
-      if (this.streak > this.bestStreak) this.bestStreak = this.streak;
-    } else {
-      this.streak = 0;
-    }
-    const res = basketValue(clean, this.streak, this.hasPowerup('double'));
+    // The multiplier tracks made baskets, not clean ones: a rim make keeps
+    // (and grows) the streak. Only a miss breaks it.
+    this.streak += 1;
+    if (this.streak > this.bestStreak) this.bestStreak = this.streak;
+    const res = basketValue(clean, this.streak, this.hasPowerup('double'), this.difficulty);
     this.score += res.points;
     this.hoopChangePending = true;
     return {
       points: res.points,
+      base: res.base,
       mult: res.mult,
       power: res.power,
       clean,
@@ -370,7 +400,7 @@ export class World {
 
   rollPowerup() {
     // Shuffle a fresh bag every time it empties, so each four-panel award is
-    // random while all three rewards still appear regularly.
+    // random while all four rewards still appear regularly.
     if (!this.powerupBag || this.powerupBag.length === 0) {
       this.powerupBag = [...POWERUP_KEYS];
       for (let i = this.powerupBag.length - 1; i > 0; i--) {
@@ -389,17 +419,35 @@ export class World {
     return type;
   }
 
+  /**
+   * Score a backboard tile hit. Every hit pays SCORE.panelHit; completing all
+   * four pays the set bonus and grants a power-up.
+   * @returns {{points:number, complete:boolean, type:string|null}|null}
+   */
   lightPanel(i) {
-    if (i < 0 || i > 3 || this.panels[i]) return null;
+    if (i < 0 || i > 3) return null;
+
+    const out = {
+      points: adjustScore(SCORE.panelHit, this.difficulty),
+      complete: false,
+      type: null,
+    };
+    this.score += out.points;
+
+    if (this.panels[i]) return out;
     this.panels[i] = true;
     this.panelPulse[i] = 1;
+
     if (this.panels.every(Boolean)) {
-      const type = this.rollPowerup();
-      this.grantPowerup(type);
+      const bonus = adjustScore(SCORE.panelSetBonus, this.difficulty);
+      out.complete = true;
+      out.points += bonus;
+      this.score += bonus;
+      out.type = this.rollPowerup();
+      this.grantPowerup(out.type);
       this.panelResetTimer = SCORE.panelResetDelay;
-      return type;
     }
-    return null;
+    return out;
   }
 
   getPowerupList() {
@@ -443,9 +491,10 @@ export class World {
       },
       onPanel: (ball, i, impact) => {
         if (ball.scored) return;
-        const type = this.lightPanel(i);
-        events.onPanel?.(ball, i, impact, type);
-        if (type) events.onPowerup?.(type);
+        const res = this.lightPanel(i);
+        if (!res) return;
+        events.onPanel?.(ball, i, impact, res);
+        if (res.type) events.onPowerup?.(res.type);
       },
       onScore: (ball, clean) => {
         ball.scoredAt = this.time;
@@ -461,6 +510,10 @@ export class World {
       if (ball.dead) continue;
       if (ball.scored && this.time - ball.scoredAt > 1.2) {
         ball.dead = true;
+        continue;
+      }
+      if (ball.portal) {
+        stepPortal(ball, dt, hoop);
         continue;
       }
       stepBall(ball, dt, hoop, cb);
@@ -531,6 +584,7 @@ export class World {
       balls: this.balls.length,
       ready: !!this.readyBall,
       pad: { ...this.pad },
+      difficulty: this.difficulty,
       hoop: { cx: this.hoop.cx, cy: this.hoop.cy, half: this.hoop.half },
       accuracy: this.shots ? this.baskets / this.shots : 0,
       time: Math.round(this.time * 100) / 100,
