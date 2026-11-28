@@ -1,6 +1,7 @@
-// The ball catalog. CLASSIC uses the supplied PNG; the rest are procedural
-// neon skins generated in code, so no external art is required. `unlockAt` is
-// the BEST score required before the ball can be equipped.
+// The ball catalog. Entries with `src` use supplied PNG art from assets/balls;
+// `pattern` + `palette` stay on them so the in-code procedural skin can stand
+// in while the image decodes (and for any ball that ships without art).
+// `unlockAt` is the BEST score required before the ball can be equipped.
 export const BALLS = [
   {
     id: 'classic',
@@ -13,9 +14,27 @@ export const BALLS = [
     note: 'THE ORIGINAL',
   },
   {
+    id: 'watermelon',
+    name: 'WATERMELON',
+    kind: 'image',
+    src: './assets/balls/watermelon.png',
+    pattern: 'aurora',
+    unlockAt: 2000,
+    glow: 'rgba(120, 255, 130, 0.35)',
+    tint: 'rgba(110, 255, 140, 0.14)',
+    palette: {
+      light: '#c9ffca',
+      mid: '#3fbf5c',
+      base: '#0a2a12',
+      edge: '#8dff9a',
+    },
+    note: 'SUMMER SLICE',
+  },
+  {
     id: 'aurora',
     name: 'AURORA',
-    kind: 'procedural',
+    kind: 'image',
+    src: './assets/balls/aurora.png',
     pattern: 'aurora',
     unlockAt: 5000,
     glow: 'rgba(92, 244, 255, 0.4)',
@@ -31,7 +50,8 @@ export const BALLS = [
   {
     id: 'nova',
     name: 'NOVA',
-    kind: 'procedural',
+    kind: 'image',
+    src: './assets/balls/nova.png',
     pattern: 'nova',
     unlockAt: 12000,
     glow: 'rgba(255, 80, 140, 0.38)',
@@ -47,7 +67,8 @@ export const BALLS = [
   {
     id: 'void',
     name: 'VOID',
-    kind: 'procedural',
+    kind: 'image',
+    src: './assets/balls/void.png',
     pattern: 'void',
     unlockAt: 25000,
     glow: 'rgba(127, 92, 255, 0.4)',
@@ -60,7 +81,7 @@ export const BALLS = [
     },
     note: 'EVENT HORIZON',
   },
-  // Placeholder high-score skins: swap the art later, keep the unlock gates.
+  // Placeholder high-score skins with no art yet: keep the unlock gates.
   {
     id: 'pulsar',
     name: 'PULSAR',
@@ -80,7 +101,8 @@ export const BALLS = [
   {
     id: 'nebula',
     name: 'NEBULA',
-    kind: 'procedural',
+    kind: 'image',
+    src: './assets/balls/nebula.png',
     pattern: 'nebula',
     unlockAt: 50000,
     glow: 'rgba(160, 92, 255, 0.4)',
@@ -112,7 +134,8 @@ export const BALLS = [
   {
     id: 'eclipse',
     name: 'ECLIPSE',
-    kind: 'procedural',
+    kind: 'image',
+    src: './assets/balls/eclipse.png',
     pattern: 'eclipse',
     unlockAt: 150000,
     glow: 'rgba(255, 176, 46, 0.42)',

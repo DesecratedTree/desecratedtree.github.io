@@ -118,10 +118,12 @@ export function drawBall(ctx, ball, { alpha = 1, streak = 0, powerups = null, re
 
     ctx.beginPath();
     ctx.arc(x, y, r - 0.6, 0, TAU);
-    ctx.strokeStyle = 'rgba(38, 8, 0, 0.32)';
+    ctx.strokeStyle = 'rgba(6, 8, 18, 0.3)';
     ctx.lineWidth = 1.2;
     ctx.stroke();
-  } else if (ballDef?.kind === 'procedural') {
+  } else if (ballDef?.palette) {
+    // Skin art still decoding: draw the matching procedural skin instead so the
+    // ball never flashes a generic orange sphere between frames.
     drawProceduralBall(ctx, x, y, r, ballDef, ball.rot || 0);
   } else {
     // Immediate procedural fallback while the skin image decodes.

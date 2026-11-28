@@ -4,7 +4,7 @@
 // cache and launch from a home-screen icon with no network at all.
 //
 // Bump VERSION whenever shipped files change: that replaces the old cache.
-const VERSION = 'dunkstar-v9';
+const VERSION = 'dunkstar-v10';
 
 const CORE = [
   './',
@@ -29,6 +29,12 @@ const CORE = [
   './src/render/fx.js',
   './src/render/hoop.js',
   './assets/basketball.png',
+  './assets/balls/aurora.png',
+  './assets/balls/eclipse.png',
+  './assets/balls/nebula.png',
+  './assets/balls/nova.png',
+  './assets/balls/void.png',
+  './assets/balls/watermelon.png',
   './assets/fonts/orbitron.woff2',
   './assets/icons/icon.svg',
   './assets/icons/icon-192.png',
